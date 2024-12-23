@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xuxu</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgb(0, 0, 0);
+            overflow: hidden;
+            text-align: center;
+            position: relative; 
+        }
+
+        #pergunta {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: white; 
+        }
+
+        .botoes {
+            display: flex;
+            gap: 10px; 
+            position: relative; 
+            z-index: 1; 
+        }
+
+        .botao {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2b029c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #imagem {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .mensagem {
+            position: absolute;
+            padding: 15px; 
+            color: rgb(255, 255, 255);
+            border-radius: 20px; 
+            font-size: 16px;
+
+            max-width: 220px;
+            word-wrap: break-word;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+            opacity: 0;
+            transition: opacity 1s; 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pergunta">Cuzinho hoje????</div>
+    <div class="botoes">
+        <button class="botao" id="sim">Sim</button>
+        <button class="botao" id="nao">Não</button>
+    </div>
+
+    <script>
+        const posicoesOcupadas = [];
+
+        function criarMensagem() {
+            const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
+            const mensagem = document.createElement('div');
+            mensagem.className = 'mensagem';
+            mensagem.textContent = fraseAleatoria;
+
+            const larguraMensagem = 250;
+            const alturaMensagem = 150;
+            let posX, posY;
+            const gifOffset = 20;
+
+            const limiteInferior = gifOffset;
+            const limiteSuperior = window.innerHeight - gifOffset - 50;
+
+            let tentativas = 0;
+            const maxTentativas = 20;
+
+            do {
+                posX = Math.random() * (window.innerWidth - larguraMensagem);
+                posY = Math.random() * (window.innerHeight - alturaMensagem);
+
+                if (posY > limiteInferior && posY < limiteSuperior) {
+                    posY = Math.random() * (window.innerHeight - alturaMensagem - gifOffset) + gifOffset;
+                }
+
+                tentativas++;
+            } while (isOverlapping(posX, posY, larguraMensagem, alturaMensagem) && tentativas < maxTentativas);
+
+            mensagem.style.left = `${posX}px`;
+            mensagem.style.top = `${posY}px`;
+
+            document.body.appendChild(mensagem);
+
+            setTimeout(() => {
+                mensagem.style.opacity = 1;
+            }, 50);
+
+            setTimeout(() => {
+                mensagem.style.opacity = 0;
+                setTimeout(() => {
+                    mensagem.remove();
+                }, 1000);
+            }, 2000);
+        }
+
+        function isOverlapping(x, y, largura, altura) {
+            return posicoesOcupadas.some(pos => {
+                return (
+                    x < pos.x + largura &&
+                    x + largura > pos.x &&
+                    y < pos.y + altura &&
+                    y + altura > pos.y
+                );
+            });
+        }
+
+        setInterval(() => {
+            criarMensagem();
+            posicoesOcupadas.push({ x: posX, y: posY });
+        }, 1000);
+
+        const botaoSim = document.getElementById('sim');
+        const botaoNao = document.getElementById('nao');
+
+        botaoSim.addEventListener('click', function() {
+            window.location.href = 'https://www.youtube.com/watch?v=-dy1uuJa-vw';
+        });
+
+        botaoNao.addEventListener('mousemove', function() {
+            const x = (Math.random() - 0.5) * 400;
+            const y = (Math.random() - 0.5) * 400;
+
+            botaoNao.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body>
+</html>
